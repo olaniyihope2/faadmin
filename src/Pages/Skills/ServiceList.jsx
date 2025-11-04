@@ -43,9 +43,9 @@ const Category = () => {
   if (!window.confirm("Are you sure you want to delete this category and all its subcategories?")) return;
 
   try {
-    await axios.delete(`${import.meta.env.VITE_BASE_URL}/category/${categoryId}`);
+    await axios.delete(`${import.meta.env.VITE_BASE_URL}/db/category/${categoryId}`);
     // Refetch all categories after deletion
-    const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/categories`);
+    const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/db/categories`);
     setCategories(data);
   } catch (error) {
     console.error("Error deleting category:", error);
@@ -67,7 +67,7 @@ const Category = () => {
           </button>
           <button
             className="ml-2 text-blue-500 hover:text-blue-700"
-  onClick={() => navigate(`/edit-category/${category._id}`)}
+  onClick={() => navigate(`/db/edit-category/${category._id}`)}
             style={{ color: "white" }}
           >
             Edit

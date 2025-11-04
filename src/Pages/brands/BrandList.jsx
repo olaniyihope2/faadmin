@@ -154,7 +154,7 @@ const BrandList = () => {
 
   const handleDelete = async (brandId) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_BASE_URL}/brands/${brandId}`);
+      await axios.delete(`${import.meta.env.VITE_BASE_URL}/db/brands/${brandId}`);
       setBrands(brands.filter((brand) => brand._id !== brandId));
     } catch (error) {
       console.error("Error deleting brand:", error);

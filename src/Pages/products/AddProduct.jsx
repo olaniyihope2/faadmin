@@ -79,7 +79,7 @@ const [decorationMethods, setDecorationMethods] = useState([
   // };
 const fetchCategories = async () => {
   try {
-    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/categories`);
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/db/categories`);
     const allCategories = res.data;
 
     setGrandParents(allCategories); // They are already top-level categories
@@ -89,7 +89,7 @@ const fetchCategories = async () => {
 };
  const fetchBrands = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/brands`);
+      const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/db/brands`);
       setBrands(res.data); // assuming API returns [{ _id, name, image }]
     } catch (error) {
       console.error("Failed to fetch brands:", error);
@@ -599,7 +599,7 @@ if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
 
     // 🚀 API call
     const productRes = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/create-product`,
+      `${import.meta.env.VITE_BASE_URL}/db/create-product`,
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },

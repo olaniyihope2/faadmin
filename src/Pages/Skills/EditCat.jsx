@@ -362,7 +362,7 @@ const EditCat = () => {
       try {
         // Fetch current category
         const { data: category } = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/category/${id}`
+          `${import.meta.env.VITE_BASE_URL}/db/category/${id}`
         );
 
         setName(category.name);
@@ -371,7 +371,7 @@ const EditCat = () => {
         // Fetch parent if exists
         if (category.parent) {
           const { data: parentCat } = await axios.get(
-            `${import.meta.env.VITE_BASE_URL}/category/${category.parent}`
+            `${import.meta.env.VITE_BASE_URL}/db/category/${category.parent}`
           );
           setSelectedParent(parentCat._id);
           setSelectedGrandParent(parentCat.parent || parentCat._id);
@@ -381,7 +381,7 @@ const EditCat = () => {
 
         // Fetch all categories for dropdowns
         const { data: allCats } = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/categories`
+          `${import.meta.env.VITE_BASE_URL}/db/categories`
         );
         setGrandParents(allCats.filter((cat) => !cat.parent));
         setParents(
@@ -445,7 +445,7 @@ const EditCat = () => {
       if (image) formData.append("image", image);
 
       await axios.put(
-        `${import.meta.env.VITE_BASE_URL}/category/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/db/category/${id}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

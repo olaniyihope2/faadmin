@@ -358,7 +358,7 @@ const NewCategory = () => {
     const fetchCategories = async () => {
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/categories`
+          `${import.meta.env.VITE_BASE_URL}/db/categories`
         );
         setParentCategories(data);
       } catch (error) {
@@ -376,7 +376,7 @@ const NewCategory = () => {
       if (categoryImage) formData.append("image", categoryImage);
       if (selectedParent) formData.append("parent", selectedParent);
 
-      await axios.post(`${import.meta.env.VITE_BASE_URL}/category`, formData);
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/db/category`, formData);
 
       setCategoryName("");
       setCategoryImage(null);

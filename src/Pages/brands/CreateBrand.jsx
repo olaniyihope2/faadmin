@@ -94,7 +94,7 @@ const CreateBrand = () => {
       if (brandImage) formData.append("image", brandImage);
 
       await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/create-brand`,
+        `${import.meta.env.VITE_BASE_URL}/db/create-brand`,
         formData
       );
 

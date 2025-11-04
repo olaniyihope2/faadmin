@@ -63,7 +63,7 @@ const [decorationMethods, setDecorationMethods] = useState([
     const fetchBrands = async () => {
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/brands`
+          `${import.meta.env.VITE_BASE_URL}/db/brands`
         );
         setBrands(data);
       } catch (error) {
@@ -75,7 +75,7 @@ const [decorationMethods, setDecorationMethods] = useState([
 
 const fetchCategories = async () => {
   try {
-    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/categories`);
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/db/categories`);
     const allCategories = res.data;
 
     setGrandParents(allCategories); // They are already top-level categories
@@ -85,7 +85,7 @@ const fetchCategories = async () => {
 };
  const fetchBrands = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/brands`);
+      const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/db/brands`);
       setBrands(res.data); // assuming API returns [{ _id, name, image }]
     } catch (error) {
       console.error("Failed to fetch brands:", error);
@@ -154,7 +154,7 @@ const fetchCategories = async () => {
 const fetchProduct = async () => {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_BASE_URL}/product/${id}`
+      `${import.meta.env.VITE_BASE_URL}/db/product/${id}`
     );
     const product = res.data;
     console.log("📦 Full product from API:", product);
@@ -183,7 +183,7 @@ const fetchProduct = async () => {
 
         // fetch parent details
         const parentRes = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/categories/${product.category.parent}`
+          `${import.meta.env.VITE_BASE_URL}/db/categories/${product.category.parent}`
         );
         const parentCat = parentRes.data;
         setSelectedParent(parentCat._id);
@@ -324,7 +324,7 @@ if (productImages.length > 0) {
 
 
     const res = await axios.put(
-      `${import.meta.env.VITE_BASE_URL}/product/${id}`,
+      `${import.meta.env.VITE_BASE_URL}/db/product/${id}`,
       formData,
       { headers: { "Content-Type": "multipart/form-data" } }
     );
