@@ -447,6 +447,7 @@ const NewCategory = () => {
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
           >
             <option value="">-- Choose an Icon --</option>
+              <option value="🧥">🧥 Clothing</option>
             <option value="📚">📚 Education</option>
             <option value="💻">💻 Tech</option>
             <option value="🎨">🎨 Design</option>
