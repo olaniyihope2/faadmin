@@ -42,29 +42,104 @@ const ProductList = () => {
     fetchProducts();
   }, []);
 
-  const handleAction = (action, product) => {
-    setOpenDropdownId(null);
+  // const handleAction = (action, product) => {
+  //   setOpenDropdownId(null);
 
-    switch (action) {
-      case "view":
-        navigate(`/product/${product._id}`);
-        break;
-      case "edit":
-        navigate(`/edit-product/${product._id}`);
-        break;
-      case "delete":
-        console.log("Delete product:", product);
-        break;
-      case "email":
-        console.log("Email about product:", product);
-        break;
-      case "promote":
-        console.log("Promote product:", product);
-        break;
-      default:
-        break;
-    }
-  };
+  //   switch (action) {
+  //     case "view":
+  //       navigate(`/product/${product._id}`);
+  //       break;
+  //     case "edit":
+  //       navigate(`/edit-product/${product._id}`);
+  //       break;
+  //      case "delete":
+  //     if (window.confirm("Are you sure you want to delete this product?")) {
+  //       try {
+  //         const response = await fetch(
+  //           `https://faclothingapi.vercel.app/api/db/product/${product._id}`,
+  //           {
+  //             method: "DELETE",
+  //             headers: {
+  //               "Content-Type": "application/json",
+  //               // Add Authorization header if needed
+  //               // "Authorization": `Bearer ${token}`
+  //             },
+  //           }
+  //         );
+
+  //         if (response.ok) {
+  //           alert("Product deleted successfully");
+  //           // Optional: remove product from frontend state
+  //           setProducts(prev => prev.filter(p => p._id !== product._id));
+  //         } else {
+  //           const data = await response.json();
+  //           alert("Failed to delete product: " + data.message);
+  //         }
+  //       } catch (error) {
+  //         console.error("Error deleting product:", error);
+  //         alert("Error deleting product");
+  //       }
+  //     }
+  //     break;
+  //     case "email":
+  //       console.log("Email about product:", product);
+  //       break;
+  //     case "promote":
+  //       console.log("Promote product:", product);
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
+const handleAction = async (action, product) => {
+  setOpenDropdownId(null);
+
+  switch (action) {
+    case "view":
+      navigate(`/product/${product._id}`);
+      break;
+    case "edit":
+      navigate(`/edit-product/${product._id}`);
+      break;
+    case "delete":
+      if (window.confirm("Are you sure you want to delete this product?")) {
+        try {
+          const response = await fetch(
+            `https://faclothingapi.vercel.app/api/db/product/${product._id}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                // Add Authorization header if needed
+                // "Authorization": `Bearer ${token}`
+              },
+            }
+          );
+
+          if (response.ok) {
+            alert("Product deleted successfully");
+            // Optional: remove product from frontend state
+            setProducts(prev => prev.filter(p => p._id !== product._id));
+          } else {
+            const data = await response.json();
+            alert("Failed to delete product: " + data.message);
+          }
+        } catch (error) {
+          console.error("Error deleting product:", error);
+          alert("Error deleting product");
+        }
+      }
+      break;
+    case "email":
+      console.log("Email about product:", product);
+      break;
+    case "promote":
+      console.log("Promote product:", product);
+      break;
+    default:
+      break;
+  }
+};
 
   const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase())
