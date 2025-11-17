@@ -13,7 +13,7 @@ const AdminWelcome = () => {
     <div className="px-4 lg:px-[8rem] py-8 bg-gradient-to-r frohm-blue-50 to-blue-100">
       <div className="max-w-4xl bg-gradient-to-r from-blue-50 to-blue-100 p-4">
         <h1 className="text-3xl font-bold text-gray-800">
-          {getGreeting()}, Fa & A Clothing Admin! 👋
+          {getGreeting()}, Rayofaa Admin! 👋
         </h1>
         <p className="mt-2 text-gray-600 text-lg">
           Welcome to your dashboard. Here's an overview to Monitor user
