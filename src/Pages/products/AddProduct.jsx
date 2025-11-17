@@ -30,6 +30,7 @@ const AddProduct = () => {
 const [isBestSeller, setIsBestSeller] = useState(false);
 const [isTrending, setIsTrending] = useState(false);
 const [isFeatured, setIsFeatured] = useState(false);
+const [isSpecial, setIsSpecial] = useState(false);
 
 const [decorationMethods, setDecorationMethods] = useState([
   { name: "", note: "" },
@@ -591,6 +592,7 @@ if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
     formData.append("isBestSeller", isBestSeller ? "true" : "false");
     formData.append("isTrending", isTrending ? "true" : "false");
     formData.append("isFeatured", isFeatured ? "true" : "false");
+    formData.append("isSpecial", isSpecial ? "true" : "false");
 
     // 🔍 Debug: show what’s being sent
     for (let [key, value] of formData.entries()) {
@@ -937,6 +939,14 @@ if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
         onChange={(e) => setIsFeatured(e.target.checked)}
       />
       Featured
+    </label>
+    <label className="flex items-center gap-2">
+      <input
+        type="checkbox"
+        checked={isSpecial}
+        onChange={(e) => setIsSpecial(e.target.checked)}
+      />
+      Special
     </label>
   </div>
 </div>
