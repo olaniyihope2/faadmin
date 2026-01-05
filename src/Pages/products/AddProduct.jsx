@@ -798,7 +798,7 @@ if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
     onChange={handleGrandParentChange}
     className="w-full p-2 border rounded"
   >
-    <option value="">-- Select Grandparent --</option>
+    <option value="">-- Select category --</option>
     {grandParents.map((cat) => (
       <option key={cat._id} value={cat._id}>
         {cat.name}
