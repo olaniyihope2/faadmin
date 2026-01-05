@@ -819,7 +819,7 @@ if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
     className="w-full p-2 border rounded"
     disabled={!parents.length}
   >
-    <option value="">-- Select Parent --</option>
+    <option value=""></option>
     {parents.map((cat) => (
       <option key={cat._id} value={cat._id}>
         {cat.name}
@@ -837,7 +837,7 @@ if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
     className="w-full p-2 border rounded"
     disabled={!children.length}
   >
-    <option value="">-- Select Child --</option>
+    <option value=""></option>
     {children.map((cat) => (
       <option key={cat._id} value={cat._id}>
         {cat.name}
