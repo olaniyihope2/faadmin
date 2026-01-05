@@ -710,19 +710,22 @@ if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
               className="w-full p-2 border rounded"
             />
           </div>
-    <div>
-  <label className="block mb-1 font-medium">Weight</label>
-  <select
-    value={weight}
-    onChange={(e) => setWeight(e.target.value)}
-    className="w-full p-2 border rounded"
-  >
-    <option value="">-- Select Weight --</option>
-    <option value="Lightweight">Lightweight</option>
-    <option value="Mediumweight">Mediumweight</option>
-    <option value="Heavyweight">Heavyweight</option>
-  </select>
+<div>
+  <label className="block mb-1 font-medium">Weight (kg)</label>
+  <div className="flex items-center">
+    <input
+      type="number"
+      step="0.01"
+      min="0"
+      placeholder="1.20"
+      value={weight}
+      onChange={(e) => setWeight(e.target.value)}
+      className="w-full p-2 border rounded"
+    />
+    <span className="ml-2 font-medium">kg</span>
+  </div>
 </div>
+
 
 
         </div>
