@@ -724,24 +724,11 @@ if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
   </select>
 </div>
 
+
         </div>
 
         <div className="grid grid-cols-2 gap-4 mb-4">
-      <div>
-        <label className="block mb-1 font-medium">Brand</label>
-        <select
-          value={brand}
-          onChange={(e) => setBrand(e.target.value)}
-          className="w-full p-2 border rounded"
-        >
-          <option value="">-- Select Brand --</option>
-          {brands.map((b) => (
-            <option key={b._id} value={b._id}>
-              {b.name}
-            </option>
-          ))}
-        </select>
-      </div>
+   
    <div>
   <label className="block mb-1 font-medium">Closure Type</label>
   <select
@@ -777,48 +764,7 @@ if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
             />
           </div>
         ))}
-<label className="block mb-1 font-medium">Decoration Methods</label>
-<div className="space-y-2">
-  {decorationMethods.map((method, idx) => (
-    <div key={idx} className="flex gap-2">
-      <select
-        value={method.name}
-        onChange={(e) => {
-          const updated = [...decorationMethods];
-          updated[idx].name = e.target.value;
-          setDecorationMethods(updated);
-        }}
-        className="p-2 border rounded w-1/2"
-      >
-        <option value="">-- Select Method --</option>
-        <option value="Printed">Printed</option>
-        <option value="Embroidered">Embroidered</option>
-        <option value="Debossed">Debossed</option>
-      </select>
-      <input
-        type="text"
-        placeholder="Note (e.g. No Minimum)"
-        value={method.note || ""}
-        onChange={(e) => {
-          const updated = [...decorationMethods];
-          updated[idx].note = e.target.value;
-          setDecorationMethods(updated);
-        }}
-        className="p-2 border rounded w-1/2"
-      />
-    </div>
-  ))}
-</div>
 
-<button
-  type="button"
-  onClick={() =>
-    setDecorationMethods([...decorationMethods, { name: "", note: "" }])
-  }
-  className="mt-2 px-3 py-1 bg-blue-500 text-white rounded"
->
-  + Add Decoration Method
-</button>
 
 
 <div className="mb-4">
@@ -846,7 +792,7 @@ if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
         {/* Parent Category */}
   {/* Grandparent */}
 <div className="mb-4">
-  <label className="block mb-1 font-medium">Grandparent Category</label>
+  <label className="block mb-1 font-medium"> Category</label>
   <select
     value={selectedGrandParent}
     onChange={handleGrandParentChange}
@@ -863,7 +809,7 @@ if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
 
 {/* Parent */}
 <div className="mb-4">
-  <label className="block mb-1 font-medium">Parent Category</label>
+  <label className="block mb-1 font-medium"> Category</label>
   <select
     value={selectedParent}
     onChange={handleParentChange}
@@ -881,7 +827,7 @@ if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
 
 {/* Child */}
 <div className="mb-4">
-  <label className="block mb-1 font-medium">Child Category</label>
+  <label className="block mb-1 font-medium"> Category</label>
   <select
     value={selectedChild}
     onChange={(e) => setSelectedChild(e.target.value)}
@@ -899,18 +845,19 @@ if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
 
 
         {/* Product Type */}
-     
-        <div className="mb-4">
-          <label className="block mb-1 font-medium">Upload Product Images</label>
-    
-          <input
-  type="file"
-  multiple
-  accept="image/*"
-  onChange={(e) => setProductImages([...e.target.files])}
-/>
+<div className="mb-4">
+  <label className="block mb-1 font-medium">
+    Upload Product Images / Videos
+  </label>
 
-        </div>
+  <input
+    type="file"
+    multiple
+    accept="image/*,video/*"
+    onChange={(e) => setProductImages([...e.target.files])}
+  />
+</div>
+
 <div className="mb-4">
   <label className="block mb-2 font-medium">Product Highlights</label>
   <div className="flex gap-4">

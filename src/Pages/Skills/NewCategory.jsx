@@ -458,14 +458,14 @@ const NewCategory = () => {
         {/* Parent Category Dropdown */}
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-2">
-            Parent Category
+             Category
           </label>
           <select
             value={selectedParent}
             onChange={(e) => setSelectedParent(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
           >
-            <option value="">-- No Parent (Top Level) --</option>
+            <option value="">-- No  (Top Level) --</option>
             {renderCategoryOptions(parentCategories)}
           </select>
         </div>
