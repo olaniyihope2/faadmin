@@ -255,12 +255,18 @@ const handleAction = async (action, product) => {
                   <td className="px-6 py-4 text-sm text-gray-700">
                     {product.color?.join(", ")}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-700">
-                    {product.size?.join(", ")}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-700">
-                    {product.quantityAvailable}
-                  </td>
+                <td className="px-6 py-4 text-sm text-gray-700">
+  {product.sizes && product.sizes.length > 0
+    ? product.sizes.map((s) => s.label).join(", ")
+    : "—"}
+</td>
+
+                <td className="px-6 py-4 text-sm text-gray-700">
+  {product.sizes && product.sizes.length > 0
+    ? product.sizes.reduce((sum, s) => sum + s.quantity, 0)
+    : 0}
+</td>
+
                   <td className="px-6 py-4 text-sm text-gray-900 font-semibold">
                     ₦{product.price?.toLocaleString()}
                   </td>
