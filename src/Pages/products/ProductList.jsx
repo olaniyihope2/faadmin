@@ -263,8 +263,8 @@ const handleAction = async (action, product) => {
 
                 <td className="px-6 py-4 text-sm text-gray-700">
   {product.sizes && product.sizes.length > 0
-    ? product.sizes.reduce((sum, s) => sum + s.quantity, 0)
-    : 0}
+    ? product.sizes.map((s) => `${s.label}: ${s.quantity}`).join(" | ")
+    : "—"}
 </td>
 
                   <td className="px-6 py-4 text-sm text-gray-900 font-semibold">
