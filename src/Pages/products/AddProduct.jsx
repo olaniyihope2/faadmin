@@ -499,76 +499,91 @@ const toggleColor = (color) => {
 //     setLoading(false);
 //   }
 // };
+const AVAILABLE_SIZES = ["XXS", "XS", "S", "M", "L", "XL", "XXL"];
+const [sizes, setSizes] = useState(
+  AVAILABLE_SIZES.map((size) => ({
+    label: size,
+    quantity: 0,
+  }))
+);
 const handleSubmit = async () => {
   setLoading(true);
 
   try {
     const formData = new FormData();
 
-    // ✅ Basic fields
+    /* =======================
+       BASIC PRODUCT INFO
+    ======================= */
     if (productName) formData.append("name", productName);
     if (productDescription) formData.append("description", productDescription);
     if (productPrice) formData.append("price", productPrice);
     if (discountPrice) formData.append("discountPrice", discountPrice);
     if (productType) formData.append("type", productType);
+    if (productTag) formData.append("tag", productTag);
 
-    // ✅ Inventory
-    if (productQuantity) {
-      formData.append("quantityAvailable", productQuantity);
+    /* =======================
+       SIZES & STOCK (IMPORTANT)
+    ======================= */
+    const filteredSizes = sizes.filter(
+      (s) => s.quantity && Number(s.quantity) > 0
+    );
+
+    if (filteredSizes.length > 0) {
+      formData.append("sizes", JSON.stringify(filteredSizes));
     }
+
+    /* =======================
+       MINIMUM QUANTITY
+    ======================= */
     if (minimumQuantity) {
       formData.append("minimumQuantity", minimumQuantity);
     }
 
-    // ✅ Attributes (arrays)
-    if (selectedColors.length > 0) {
-      selectedColors.forEach((color) => formData.append("color", color));
-    }
-    if (productSize) {
-      formData.append("size", productSize);
-    }
-
-    if (productTag) {
-      formData.append("tag", productTag);
+    /* =======================
+       COLORS
+    ======================= */
+    if (Array.isArray(selectedColors) && selectedColors.length > 0) {
+      selectedColors.forEach((color) => {
+        formData.append("color", color);
+      });
     }
 
-    // if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
-    //   decorationMethods.forEach((method) =>
-    //     formData.append("decorationMethods", method)
-    //   );
-    // } else if (decorationMethods) {
-    //   formData.append("decorationMethods", decorationMethods);
-    // }
-// if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
-//   decorationMethods.forEach((method, index) => {
-//     formData.append(`decorationMethods[${index}][name]`, method.name);
-//     formData.append(`decorationMethods[${index}][note]`, method.note || "");
-//   });
-// }
+    /* =======================
+       DECORATION METHODS
+    ======================= */
+    if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
+      decorationMethods
+        .filter((method) => method.name && method.name.trim() !== "")
+        .forEach((method, index) => {
+          formData.append(`decorationMethods[${index}][name]`, method.name);
+          formData.append(
+            `decorationMethods[${index}][note]`,
+            method.note || ""
+          );
+        });
+    }
 
-if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
-  decorationMethods
-    .filter((method) => method.name && method.name.trim() !== "")
-    .forEach((method, index) => {
-      formData.append(`decorationMethods[${index}][name]`, method.name);
-      formData.append(`decorationMethods[${index}][note]`, method.note || "");
-    });
-}
-
-
+    /* =======================
+       FEATURES
+    ======================= */
     if (Array.isArray(features) && features.length > 0) {
-      features.forEach((feature) => formData.append("features", feature));
-    } else if (features) {
-      formData.append("features", features);
+      features.forEach((feature) => {
+        formData.append("features", feature);
+      });
     }
 
-    // ✅ Extra details (single values)
+    /* =======================
+       EXTRA DETAILS
+    ======================= */
     if (material) formData.append("material", material);
     if (weight) formData.append("weight", weight);
     if (brand) formData.append("brand", brand);
     if (closureType) formData.append("closureType", closureType);
 
-    // ✅ Category (child → parent → grandparent fallback)
+    /* =======================
+       CATEGORY (SMART FALLBACK)
+    ======================= */
     if (selectedChild) {
       formData.append("category", selectedChild);
     } else if (selectedParent) {
@@ -577,34 +592,47 @@ if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
       formData.append("category", selectedGrandParent);
     }
 
-    // ✅ Images (multiple uploads)
-    if (productImages.length > 0) {
+    /* =======================
+       IMAGES
+    ======================= */
+    if (Array.isArray(productImages) && productImages.length > 0) {
       productImages.forEach((image) => {
         formData.append("images", image);
       });
     }
 
-    // ✅ Supporting file (optional)
+    /* =======================
+       OPTIONAL SUPPORTING FILE
+    ======================= */
     if (supportingFile) {
       formData.append("supportingFile", supportingFile);
     }
-    // ✅ Product flags (booleans)
+
+    /* =======================
+       PRODUCT FLAGS
+    ======================= */
     formData.append("isBestSeller", isBestSeller ? "true" : "false");
     formData.append("isTrending", isTrending ? "true" : "false");
     formData.append("isFeatured", isFeatured ? "true" : "false");
     formData.append("isSpecial", isSpecial ? "true" : "false");
 
-    // 🔍 Debug: show what’s being sent
+    /* =======================
+       DEBUG (OPTIONAL)
+    ======================= */
     for (let [key, value] of formData.entries()) {
       console.log(key, value);
     }
 
-    // 🚀 API call
+    /* =======================
+       API REQUEST
+    ======================= */
     const productRes = await axios.post(
       `${import.meta.env.VITE_BASE_URL}/db/create-product`,
       formData,
       {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       }
     );
 
@@ -616,6 +644,7 @@ if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
     setLoading(false);
   }
 };
+
 
 
   const handleImageChange = (e) => {
@@ -679,27 +708,42 @@ if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
             />
           </div>
         </div>
-        {/* Quantity, Size, Language */}
-        <div className="grid grid-cols-3 gap-4 mb-4">
-          <div>
-            <label className="block mb-1 font-medium">Quantity</label>
-            <input
-              type="number"
-              value={productQuantity}
-              onChange={(e) => setProductQuantity(e.target.value)}
-              className="w-full p-2 border rounded"
-            />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">Size</label>
-            <input
-              value={productSize}
-              onChange={(e) => setProductSize(e.target.value)}
-              className="w-full p-2 border rounded"
-            />
-          </div>
-        
-        </div>
+   <div className="mb-6">
+  <label className="block mb-2 font-medium">
+    Sizes & Stock
+  </label>
+
+  <div className="grid grid-cols-2 gap-3">
+    {sizes.map((size, index) => (
+      <div key={size.label} className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={size.quantity > 0}
+          onChange={(e) => {
+            const updated = [...sizes];
+            updated[index].quantity = e.target.checked ? 1 : 0;
+            setSizes(updated);
+          }}
+        />
+
+        <span className="w-10">{size.label}</span>
+
+        <input
+          type="number"
+          min="0"
+          value={size.quantity}
+          onChange={(e) => {
+            const updated = [...sizes];
+            updated[index].quantity = Number(e.target.value);
+            setSizes(updated);
+          }}
+          className="w-20 p-1 border rounded"
+        />
+      </div>
+    ))}
+  </div>
+</div>
+
  {/* Grandparent Category */}
    <div className="grid grid-cols-2 gap-4 mb-4">
           <div>
