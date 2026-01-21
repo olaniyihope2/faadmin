@@ -67,7 +67,7 @@ const Category = () => {
           </button>
           <button
             className="ml-2 text-blue-500 hover:text-blue-700"
-  onClick={() => navigate(`/db/edit-category/${category._id}`)}
+  onClick={() => navigate(`/edit-category/${category._id}`)}
             style={{ color: "white" }}
           >
             Edit
