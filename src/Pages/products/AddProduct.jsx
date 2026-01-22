@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AdminHeader from "../../Components/AdminHeader/AdminHeader";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const AddProduct = () => {
   const [productName, setProductName] = useState("");
@@ -11,7 +14,7 @@ const AddProduct = () => {
   const [productType, setProductType] = useState("");
   const [productQuantity, setProductQuantity] = useState(0);
   const [productSize, setProductSize] = useState("");
-  const [productTag, setProductTag] = useState("");
+
   const [productISBN, setProductISBN] = useState("");
   const [categoryName, setCategoryName] = useState("");
   const [categoryImage, setCategoryImage] = useState(null);
@@ -31,12 +34,14 @@ const [isBestSeller, setIsBestSeller] = useState(false);
 const [isTrending, setIsTrending] = useState(false);
 const [isFeatured, setIsFeatured] = useState(false);
 const [isSpecial, setIsSpecial] = useState(false);
+const [productTag, setProductTag] = useState([]); // ✅ array
+const [features, setFeatures] = useState([]);     // ✅ array
 
 const [decorationMethods, setDecorationMethods] = useState([
   { name: "", note: "" },
 ]);
 
-  const [features, setFeatures] = useState("");
+ 
   const [material, setMaterial] = useState("");
   const [weight, setWeight] = useState("");
   const [brand, setBrand] = useState("");
@@ -60,24 +65,6 @@ const [decorationMethods, setDecorationMethods] = useState([
   const [newSubCategory, setNewSubCategory] = useState("");
   const navigate = useNavigate();
 
-  // Fetch all categories
-  // const fetchCategories = async () => {
-  //   try {
-  //     const res = await axios.get(
-  //       `${import.meta.env.VITE_BASE_URL}/categories`
-  //     );
-  //     const allCategories = res.data;
-  //     setCategories(allCategories);
-
-  //     // Parent categories are those with null or no parent
-  //     const parents = allCategories.filter(
-  //       (cat) => !cat.parent || cat.parent === null
-  //     );
-  //     setParentCategories(parents);
-  //   } catch (error) {
-  //     console.error("Failed to fetch categories:", error);
-  //   }
-  // };
 const fetchCategories = async () => {
   try {
     const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/db/categories`);
@@ -100,93 +87,6 @@ const fetchCategories = async () => {
   useEffect(() => {
     fetchBrands();
   }, []);
-
-
-  // Handle parent selection
-  // const handleParentChange = (e) => {
-  //   const parentId = e.target.value;
-  //   setSelectedParentId(parentId);
-  //   setSelectedChildId("");
-
-  //   const children = categories.filter((cat) => cat.parent === parentId);
-  //   setChildCategories(children);
-  // };
-  // const handleParentChange = (e) => {
-  //   const parentId = e.target.value;
-  //   setSelectedParentId(parentId);
-  //   setSelectedChildId("");
-
-  //   const children = categories.filter((cat) => {
-  //     // Normalize the parent ID
-  //     if (!cat.parent) return false;
-
-  //     const catParentId =
-  //       typeof cat.parent === "string" ? cat.parent : cat.parent._id;
-
-  //     return catParentId === parentId;
-  //   });
-  //   console.log("Parent ID:", selectedParentId);
-  //   console.log("All categories:", categories);
-  //   console.log("Filtered children:", childCategories);
-
-  //   setChildCategories(children);
-  // };
-  // const handleParentChange = (e) => {
-  //   const parentId = e.target.value;
-  //   setSelectedParentId(parentId);
-  //   setSelectedChildId("");
-
-  //   const selectedParent = categories.find((cat) => cat._id === parentId);
-
-  //   const children =
-  //     selectedParent?.children?.filter((child) => {
-  //       // Optional: Filter out products if you only want subcategories
-  //       return child.name && child._id;
-  //     }) || [];
-
-  //   console.log("Parent ID:", parentId);
-  //   console.log("Selected Parent:", selectedParent);
-  //   console.log("Filtered children:", children);
-
-  //   setChildCategories(children);
-  // };
-
-  // Handle grandparent change
-  // const handleGrandParentChange = (e) => {
-  //   const grandParentId = e.target.value;
-  //   setSelectedGrandParent(grandParentId);
-  //   setSelectedParent("");
-  //   setSelectedChild("");
-
-  //   // Find parents of this grandparent
-  //   const parentsList = categories.filter(
-  //     (cat) =>
-  //       cat.parent &&
-  //       (typeof cat.parent === "string"
-  //         ? cat.parent === grandParentId
-  //         : cat.parent._id === grandParentId)
-  //   );
-  //   setParents(parentsList);
-  //   setChildren([]);
-  // };
-
-
-  // Handle parent change
-  // const handleParentChange = (e) => {
-  //   const parentId = e.target.value;
-  //   setSelectedParent(parentId);
-  //   setSelectedChild("");
-
-  //   // Find children of this parent
-  //   const childList = categories.filter(
-  //     (cat) =>
-  //       cat.parent &&
-  //       (typeof cat.parent === "string"
-  //         ? cat.parent === parentId
-  //         : cat.parent._id === parentId)
-  //   );
-  //   setChildren(childList);
-  // };
 
 const handleGrandParentChange = (e) => {
   const grandParentId = e.target.value;
@@ -256,249 +156,7 @@ const toggleColor = (color) => {
   }
 };
 
-  // const handleSubmit = async () => {
-  //   try {
-  //     // Step 1: Create the parent category
-  //     const formData = new FormData();
-  //     formData.append("name", categoryName);
-  //     formData.append("icon", selectedIcon);
-  //     if (categoryImage) formData.append("image", categoryImage);
 
-  //     // Create the category
-  //     const parentRes = await axios.post(
-  //       `${import.meta.env.VITE_BASE_URL}/category`,
-  //       formData
-  //     );
-
-  //     const parentCategory = parentRes.data;
-
-  //     // Step 2: Create each subcategory
-  //     for (let sub of subCategories) {
-  //       const subData = new FormData();
-  //       subData.append("name", sub);
-  //       subData.append("icon", selectedIcon); // Optional: reuse or change icon
-  //       subData.append("parent", parentCategory._id);
-
-  //       await axios.post(`${import.meta.env.VITE_BASE_URL}/category`, subData);
-  //     }
-
-  //     // Step 3: Now create the product
-  //     const productFormData = new FormData();
-  //     productFormData.append("name", productName);
-  //     productFormData.append("description", productDescription);
-  //     productFormData.append("price", productPrice);
-  //     productFormData.append("category", parentCategory._id); // Attach the category to the product
-  //     productFormData.append("quantityAvailable", productQuantity);
-  //     productFormData.append("size", productSize);
-  //     productFormData.append("isbn", productISBN);
-  //     productFormData.append("productType", productType);
-  //     if (productImages.length > 0) {
-  //       productImages.forEach((image, index) => {
-  //         productFormData.append(`images[${index}]`, image);
-  //       });
-  //     }
-
-  //     const productRes = await axios.post(
-  //       `${import.meta.env.VITE_BASE_URL}/create-product`,
-  //       productFormData
-  //     );
-
-  //     console.log("Product created:", productRes.data);
-
-  //     // Reset form
-  //     setProductName("");
-  //     setProductDescription("");
-  //     setProductPrice("");
-  //     setProductCategory("");
-  //     setProductImages([]);
-  //     setProductType("");
-  //     setProductQuantity(0);
-  //     setProductSize("");
-  //     setProductISBN("");
-  //     setCategoryName("");
-  //     setCategoryImage(null);
-  //     setSelectedIcon("");
-  //     setSubCategories([]);
-  //     navigate("/products"); // Navigate back to products list
-  //   } catch (error) {
-  //     console.error("Error creating product:", error);
-  //   }
-  // };
-
-  // const handleSubmit = async () => {
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append("name", productName);
-  //     formData.append("description", productDescription);
-  //     formData.append("price", productPrice);
-  //     formData.append("discountPrice", discountPrice);
-  //     formData.append("quantityAvailable", productQuantity);
-  //     formData.append("size", productSize);
-  //     formData.append("language", language);
-  //     formData.append("isbn", productISBN);
-  //     formData.append("productType", productType);
-  //     formData.append("category", selectedChildId); // Attach child category
-  //     // if (videoOrAudioFile) {
-  //     //   formData.append("videoFile", videoOrAudioFile);
-  //     // }
-
-  //     // productImages.forEach((image, index) => {
-  //     //   formData.append(`images[${index}]`, image);
-  //     // });
-  //     productImages.forEach((image) => {
-  //       formData.append("images", image); // Use same key 'images'
-  //     });
-  //     // if (videoOrAudioFile) {
-  //     //   formData.append("videoFile", videoOrAudioFile);
-  //     // }
-  //     if (supportingFile) {
-  //       formData.append("supportingFile", supportingFile);
-  //     }
-
-  //     const productRes = await axios.post(
-  //       `${import.meta.env.VITE_BASE_URL}/create-product`,
-  //       formData
-  //     );
-
-  //     console.log("Product created:", productRes.data);
-  //     navigate("/products");
-  //   } catch (error) {
-  //     console.error("Error creating product:", error);
-  //   }
-  // };
-
-
-  // const handleSubmit = async () => {
-  //   setLoading(true); // Start loading before making the request
-
-  //   try {
-  //     const formData = new FormData();
-
-  //     // Append fields only if they are not empty
-  //     if (productName) formData.append("name", productName);
-  //     if (productDescription)
-  //       formData.append("description", productDescription);
-  //     if (productPrice) formData.append("price", productPrice);
-  //     if (discountPrice) formData.append("discountPrice", discountPrice);
-  //     if (productQuantity)
-  //       formData.append("quantityAvailable", productQuantity);
-  //     if (productSize) formData.append("size", productSize);
-  //     if (language) formData.append("language", language);
-  //     if (productISBN) formData.append("isbn", productISBN);
-  //     if (productType) formData.append("productType", productType);
-  //     if (selectedChildId) formData.append("category", selectedChildId); // Attach child category
-
-  //     // Images
-  //     productImages.forEach((image) => {
-  //       formData.append("images", image);
-  //     });
-
-  //     // Supporting file (optional)
-  //     if (supportingFile) {
-  //       formData.append("supportingFile", supportingFile);
-  //     }
-
-  //     // Make the POST request to the server
-  //     const productRes = await axios.post(
-  //       `${import.meta.env.VITE_BASE_URL}/create-product`,
-  //       formData
-  //     );
-
-  //     console.log("Product created:", productRes.data);
-  //     navigate("/products");
-  //   } catch (error) {
-  //     console.error("Error creating product:", error);
-  //   } finally {
-  //     setLoading(false); // Stop loading after submission
-  //   }
-  // };
-// const handleSubmit = async () => {
-//   setLoading(true);
-
-//   try {
-//     const formData = new FormData();
-
-//     // ✅ Basic fields
-//     if (productName) formData.append("name", productName);
-//     if (productDescription) formData.append("description", productDescription);
-//     if (productPrice) formData.append("price", productPrice);
-//     if (discountPrice) formData.append("discountPrice", discountPrice);
-//     if (productType) formData.append("type", productType);
-
-//     // ✅ Inventory
-//     if (productQuantity) {
-//       formData.append("quantityAvailable", productQuantity);
-//     }
-//     if (minimumQuantity) {
-//       formData.append("minimumQuantity", minimumQuantity);
-//     }
-
-//     // ✅ Attributes (arrays)
-//     if (selectedColors.length > 0) {
-//       selectedColors.forEach((color) => formData.append("color", color));
-//     }
-// if (productSize) {
-//   formData.append("size", productSize);
-// }
-
-
-// if (productTag) {
-//   formData.append("tag", productTag);
-// }
-
-
-//     if (Array.isArray(decorationMethods) && decorationMethods.length > 0) {
-//       decorationMethods.forEach((method) =>
-//         formData.append("decorationMethods", method)
-//       );
-//     } else if (decorationMethods) {
-//       formData.append("decorationMethods", decorationMethods);
-//     }
-
-//     if (Array.isArray(features) && features.length > 0) {
-//       features.forEach((feature) => formData.append("features", feature));
-//     } else if (features) {
-//       formData.append("features", features);
-//     }
-
-//     // ✅ Extra details (single values)
-//     if (material) formData.append("material", material);
-//     if (weight) formData.append("weight", weight);
-//     if (brand) formData.append("brand", brand);
-//     if (closureType) formData.append("closureType", closureType);
-
-//     // ✅ Category
-//     if (selectedChild) formData.append("category", selectedChild);
-
-//     // ✅ Images (multiple uploads)
-//     if (productImages.length > 0) {
-//       productImages.forEach((image) => {
-//         formData.append("images", image);
-//       });
-//     }
-
-//     // ✅ Supporting file (optional)
-//     if (supportingFile) {
-//       formData.append("supportingFile", supportingFile);
-//     }
-
-//     // 🚀 API call
-//     const productRes = await axios.post(
-//       `${import.meta.env.VITE_BASE_URL}/create-product`,
-//       formData,
-//       {
-//         headers: { "Content-Type": "multipart/form-data" },
-//       }
-//     );
-
-//     console.log("✅ Product created:", productRes.data);
-//     navigate("/products");
-//   } catch (error) {
-//     console.error("❌ Error creating product:", error);
-//   } finally {
-//     setLoading(false);
-//   }
-// };
 const AVAILABLE_SIZES = ["XXS", "XS", "S", "M", "L", "XL", "XXL"];
 const [sizes, setSizes] = useState(
   AVAILABLE_SIZES.map((size) => ({
@@ -506,6 +164,8 @@ const [sizes, setSizes] = useState(
     quantity: 0,
   }))
 );
+
+
 const handleSubmit = async () => {
   setLoading(true);
 
@@ -518,9 +178,16 @@ const handleSubmit = async () => {
     if (productName) formData.append("name", productName);
     if (productDescription) formData.append("description", productDescription);
     if (productPrice) formData.append("price", productPrice);
-    if (discountPrice) formData.append("discountPrice", discountPrice);
+   
     if (productType) formData.append("type", productType);
-    if (productTag) formData.append("tag", productTag);
+if (productTag.length > 0) {
+  productTag.forEach((tag) => formData.append("tag", tag));
+}
+
+if (features.length > 0) {
+  features.forEach((feature) => formData.append("features", feature));
+}
+
 
     /* =======================
        SIZES & STOCK (IMPORTANT)
@@ -543,11 +210,11 @@ const handleSubmit = async () => {
     /* =======================
        COLORS
     ======================= */
-    if (Array.isArray(selectedColors) && selectedColors.length > 0) {
-      selectedColors.forEach((color) => {
-        formData.append("color", color);
-      });
-    }
+    // if (Array.isArray(selectedColors) && selectedColors.length > 0) {
+    //   selectedColors.forEach((color) => {
+    //     formData.append("color", color);
+    //   });
+    // }
 
     /* =======================
        DECORATION METHODS
@@ -635,11 +302,30 @@ const handleSubmit = async () => {
         },
       }
     );
+  toast.success("Product added successfully!", {
+  position: "top-right",
+  autoClose: 3000,
+});
 
-    console.log("✅ Product created:", productRes.data);
-    navigate("/products");
+console.log("✅ Product created:", productRes.data);
+
+// Navigate after toast finishes
+setTimeout(() => {
+  navigate("/products");
+}, 3100); // slightly longer than autoClose
+
   } catch (error) {
     console.error("❌ Error creating product:", error);
+     const errorMessage = error.response?.data?.message || error.message || "Failed to add product";
+    toast.error(`Error: ${errorMessage}`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   } finally {
     setLoading(false);
   }
@@ -651,9 +337,84 @@ const handleSubmit = async () => {
     const files = Array.from(e.target.files); // ✅ Convert to array
     setProductImages(files);
   };
+const ArrayInputField = ({ label, values, setValues }) => {
+  const [input, setInput] = useState("");
+
+  const handleAdd = () => {
+    const trimmed = input.trim();
+    if (trimmed && !values.includes(trimmed)) {
+      setValues([...values, trimmed]);
+      setInput("");
+    }
+  };
+
+  const handleRemove = (item) => {
+    setValues(values.filter((v) => v !== item));
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAdd();
+    }
+  };
+
+  return (
+    <div className="mb-4">
+
+      <label className="block mb-1 font-medium">{label}</label>
+      <div className="flex flex-wrap gap-2 mb-2">
+        {values.map((val) => (
+          <span
+            key={val}
+            className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full flex items-center gap-1"
+          >
+            {val}{" "}
+            <button
+              type="button"
+              onClick={() => handleRemove(val)}
+              className="text-red-500 font-bold"
+            >
+              ×
+            </button>
+          </span>
+        ))}
+      </div>
+      <div className="flex gap-2">
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyPress={handleKeyPress}
+          placeholder={`Add ${label.toLowerCase()}`}
+          className="flex-1 p-2 border rounded"
+        />
+        <button
+          type="button"
+          onClick={handleAdd}
+          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+            style={{ backgroundColor: "#8b023a" }}
+        >
+          +
+        </button>
+      </div>
+    </div>
+  );
+};
 
   return (
     <>
+         <ToastContainer 
+      position="top-right"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+    />
       <AdminHeader />
       <div className="p-6 max-w-2xl mx-auto">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">
@@ -698,15 +459,7 @@ const handleSubmit = async () => {
               className="w-full p-2 border rounded"
             />
           </div>
-          <div>
-            <label className="block mb-1 font-medium">Discount Price</label>
-            <input
-              type="number"
-              value={discountPrice}
-              onChange={(e) => setDiscountPrice(e.target.value)}
-              className="w-full p-2 border rounded"
-            />
-          </div>
+       
         </div>
    <div className="mb-6">
   <label className="block mb-2 font-medium">
@@ -755,19 +508,22 @@ const handleSubmit = async () => {
             />
           </div>
 <div>
-  <label className="block mb-1 font-medium">Weight (kg)</label>
+  <label className="block mb-1 font-medium">Fabric Weight</label>
   <div className="flex items-center">
     <input
       type="number"
       step="0.01"
       min="0"
-      placeholder="1.20"
+      placeholder="4.5"
       value={weight}
-      onChange={(e) => setWeight(e.target.value)}
+      onChange={(e) => setWeight(Number(e.target.value))}
       className="w-full p-2 border rounded"
     />
-    <span className="ml-2 font-medium">kg</span>
+    <span className="ml-2 font-medium">oz/yd²</span>
   </div>
+  <p className="text-sm text-gray-500 mt-1">
+    Typical clothing weight: 3–6 oz/yd² (light t-shirt ≈ 4 oz/yd²)
+  </p>
 </div>
 
 
@@ -793,28 +549,23 @@ const handleSubmit = async () => {
 </div>
 
         </div>
+<ArrayInputField
+  label="Tags"
+  values={productTag}
+  setValues={setProductTag}
+/>
 
-        {/* Array fields */}
-        {[
+<ArrayInputField
+  label="Features"
+  values={features}
+  setValues={setFeatures}
 
-       
-          { label: "Tags (comma separated)", state: productTag, setter: setProductTag },
-       
-          { label: "Features (comma separated)", state: features, setter: setFeatures },
-        ].map(({ label, state, setter }) => (
-          <div key={label} className="mb-4">
-            <label className="block mb-1 font-medium">{label}</label>
-            <input
-              value={state}
-              onChange={(e) => setter(e.target.value)}
-              className="w-full p-2 border rounded"
-            />
-          </div>
-        ))}
+/>
 
 
 
-<div className="mb-4">
+
+{/* <div className="mb-4">
   <label className="block mb-2 font-medium">Select Colors</label>
   <div className="flex flex-wrap gap-2">
     {availableColors.map((color) => (
@@ -833,7 +584,7 @@ const handleSubmit = async () => {
   <div className="mt-2 text-sm text-gray-600">
     Selected: {selectedColors.join(", ") || "None"}
   </div>
-</div>
+</div> */}
 
 
         {/* Parent Category */}
